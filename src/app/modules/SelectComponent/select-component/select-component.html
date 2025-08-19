@@ -1,0 +1,46 @@
+<div class="form-field" [formGroup]="config.formGroup">
+    @if(config.label) {
+        <label [for]="config.formControlName" class="form-label">
+            {{ config.label }}
+            @if(config.required)
+            {
+                <span class="text-red-500">*</span>
+            }
+        </label>
+    }
+
+    @if(!config.isMultiSelect)
+    {
+        <p-select [id]="config.formControlName"
+                  [options]="config.options"
+                  [formControlName]="config.formControlName"
+                  [optionLabel]="'value'"
+                  [optionValue]="'key'"
+                  [filter]="config.isSearchable"
+                  size="small"
+                  [disabled]="config.disabled == undefined ? false : config.disabled"
+                  [placeholder]="config.placeholder || ''"
+                  class="form-input !py-1 !px-2"></p-select>
+
+    }
+    @else {
+        <p-multiselect
+                     [id]="config.formControlName"
+                     [options]="config.options"
+                     [formControlName]="config.formControlName"
+                     [optionLabel]="'value'"
+                     [optionValue]="'key'"
+                     [filter]="config.isSearchable"
+                     size="small"
+                     [disabled]="config.disabled == undefined ? false : config.disabled"
+                     [placeholder]="config.placeholder || ''"
+                     class="form-input !py-1 !px-2"></p-multiselect>
+    }
+
+    @if(hasError)
+    {
+        <small class="error-message">
+          {{ errorMessage }}
+        </small>
+    }
+</div>

@@ -1,0 +1,79 @@
+<div class="form-field" [formGroup]="config.formGroup">
+
+    @if(config.label) {
+        <label [for]="config.formControlName" class="form-label">
+            {{ config.label }}
+            @if(config.required)
+            {
+                <span class="text-red-500">*</span>
+            }
+        </label>
+    }
+
+    @if(config.type === inputComponentType.Password) {
+        <p-password [id]="config.formControlName"
+                    [placeholder]="config.placeholder || ''"
+                    [formControlName]="config.formControlName"
+                    [disabled]="config.disabled == undefined ? false : config.disabled"
+                    [toggleMask]="true"
+                    [feedback]="false"
+                    class="form-field">
+                    <!-- change pending for adding proper css in password field and bottom margin  -->
+        </p-password>
+    }
+    @else {
+        <!-- With Prefix Icon -->
+        @if(config.prefixIcon) {
+            <p-iconfield class="w-full">
+                <p-inputicon class="pi pi-{{config.prefixIcon}}"/>
+                <input pInputText
+                        [id]="config.formControlName"
+                        [type]="config.type"
+                        [placeholder]="config.placeholder || ''"
+                        [formControlName]="config.formControlName"
+                        [disabled]="config.disabled == undefined ? false : config.disabled"
+                        class="form-input"
+                        />
+            </p-iconfield>
+        }
+
+        <!-- Without Prefix -->
+        @if(!config.prefixIcon) {
+
+            @if(config.suffixIcon) {
+                <p-iconfield class="w-full">
+                    <input pInputText
+                    [id]="config.formControlName"
+                    [type]="config.type"
+                    [placeholder]="config.placeholder || ''"
+                    [formControl]="control"
+                    [disabled]="config.disabled == undefined ? false : config.disabled"
+                    class="form-input"
+                    />          
+                    <p-inputicon class="pi pi-{{config.prefixIcon}}"/>
+                </p-iconfield>
+            }
+
+            @if(!config.suffixIcon) {
+                
+                    <input
+                    pInputText
+                    [id]="config.formControlName"
+                    [type]="config.type"
+                    [placeholder]="config.placeholder || ''"
+                    [formControl]="control"
+                    [disabled]="config.disabled == undefined ? false : config.disabled"
+                    class="form-input"
+                    />
+        
+            }
+        }
+    }
+
+    @if(hasError)
+    {
+        <small class="error-message">
+          {{ errorMessage }}
+        </small>
+    }
+  </div>
