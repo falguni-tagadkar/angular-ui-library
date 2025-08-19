@@ -1,0 +1,15 @@
+/* You can add global styles to this file, and also import other style files */
+@use '../src/assets/layout/layout.scss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+// @layer utilities {
+//     .bg-surface {
+//       @apply bg-surface-50;
+//     }
+  
+//     .app-dark .bg-surface {
+//       @apply bg-surface-900;
+//     }
+//   }
