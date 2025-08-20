@@ -1,4 +1,5 @@
 import { Injectable, signal, computed, effect } from '@angular/core';
+import { Subject } from 'rxjs';
 
 export interface LayoutConfig {
   darkTheme?: boolean;
@@ -37,9 +38,10 @@ export class LayoutService {
   // Instead of Subjects, just use signals to hold “last event”
   lastConfigUpdate = signal<LayoutConfig | null>(null);
   lastOverlayOpen = signal<boolean>(false);
-  lastMenuChange = signal<MenuChangeEvent | null>(null);
   lastReset = signal<boolean>(false);
 
+  private overlayOpen = new Subject<any>();
+  overlayOpen$ = this.overlayOpen.asObservable();
   // --- Computed ---
   theme = computed(() => (this.layoutConfig().darkTheme ? 'light' : 'dark'));
   isSidebarActive = computed(() => this.layoutState().overlayMenuActive || this.layoutState().staticMenuMobileActive);
@@ -97,19 +99,21 @@ export class LayoutService {
   }
 
   onMenuToggle() {
+    //if overlay is set to true, toggle overlay menu and inform all subscribers
     if (this.isOverlay()) {
       this.layoutState.update(prev => ({ ...prev, overlayMenuActive: !prev.overlayMenuActive }));
       if (this.layoutState().overlayMenuActive) {
-        this.lastOverlayOpen.set(true); // replaces Subject
+        this.overlayOpen.next(null)
       }
     }
 
+    //if static is set to true, toggle static menu based on desktop or mobile
     if (this.isDesktop()) {
       this.layoutState.update(prev => ({ ...prev, staticMenuDesktopInactive: !prev.staticMenuDesktopInactive }));
     } else {
       this.layoutState.update(prev => ({ ...prev, staticMenuMobileActive: !prev.staticMenuMobileActive }));
       if (this.layoutState().staticMenuMobileActive) {
-        this.lastOverlayOpen.set(true); // replaces Subject
+        this.overlayOpen.next(null);
       }
     }
   }
@@ -122,11 +126,8 @@ export class LayoutService {
     return !this.isDesktop();
   }
 
-  onMenuStateChange(event: MenuChangeEvent) {
-    this.lastMenuChange.set(event);
-  }
-
   reset() {
     this.lastReset.set(true);
   }
+
 }

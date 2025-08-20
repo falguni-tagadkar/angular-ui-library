@@ -1,0 +1,14 @@
+<div class="layout-sidebar"
+     [class.active]="layoutService.isSidebarActive()">
+  <button class="toggle-btn" (click)="onMenuToggle()">Toggle Sidebar</button>
+  <div class="sidebar-content">
+    Sidebar content
+  </div>
+</div>
+
+<!-- Overlay mask (only for mobile overlay mode) -->
+ @if(!layoutService.isDesktop() && layoutService.isSidebarActive())
+ {
+     <div class="layout-mask"
+          (click)="toggleOverlay()"></div>
+ }
